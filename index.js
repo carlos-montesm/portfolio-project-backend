@@ -1,0 +1,1 @@
+// NodeJS configuration file, server creation, connection to the database
