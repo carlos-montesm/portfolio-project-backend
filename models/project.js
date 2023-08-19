@@ -13,7 +13,8 @@ var ProjectSchema = Schema({
     description: String,
     category: String,
     year: Number,
-    langs: [String]
+    langs: String,
+    image: String
 });
 
 // Export module, to be able to use it in other files with the import statement
