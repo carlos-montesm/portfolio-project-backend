@@ -9,4 +9,7 @@ var router = express.Router(); // Load the Router object, to use get, post, ...
 router.get('/home', ProjectController.home); // Route /home
 router.post('/test', ProjectController.test); // Route /test
 
+// Added save-project route to save a project with post method
+router.post('/save-project', ProjectController.saveProject);
+
 module.exports = router; // Export, to use it in other files
