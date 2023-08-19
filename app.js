@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var app = express(); // Run the express function
 
 // Load route files
+var project_routes = require('./routes/project');
 
 // middlewares
 app.use(bodyParser.urlencoded({extended:false}));
@@ -19,22 +20,8 @@ app.use(bodyParser.json());
 // CORS
 
 // Routes
-// Test routes
-app.get('/', (req, res) => { // Http get method
-    res.status(200).send( // Server response successful
-        "<h1>Homepage</h1>"
-    );
-});
+// Overwrite the route so that it loads within the app
+app.use('/api', project_routes);
 
-app.post('/test/:id', (req, res) => { // Http post method
-    console.log(req.body.name);
-    console.log(req.query.web);
-    console.log(req.params.id);
-
-    res.status(200).send({ // Server response successful
-        message: "Hello World from my NodeJS API"
-    });
-});
-
-// Export
+// Export, to use it in other files
 module.exports = app;
