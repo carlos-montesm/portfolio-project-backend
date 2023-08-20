@@ -3,6 +3,7 @@
 // which uses the project entity
 'use strict'
 
+const project = require('../models/project');
 var Project = require('../models/project'); // Import the project model
 
 var controller = {
@@ -51,7 +52,38 @@ var controller = {
                 message: 'Error saving document.' // Error message
             });
         });
+    },
+
+    // API method that returns a document from the database
+    getProject: function(req, res){
+        var projectId = req.params.id;
+
+        // If the route does not have the ID, /project/:id?, id? optional
+        if(projectId == null) return res.status(404).send({message: 'The project does not exist.'});
+
+        // Mongoose function, find an object in the database whose ID is passed by parameter
+        Project.findById(projectId)
+        .then((project) => {
+
+            if(!project) { // project does not exist, it returns an error
+                return res.status(404).send({
+                    message: 'The project does not exist.'
+                });
+            }
+
+            return res.status(200).send({ // Server response successful, it returns a project
+                project
+            });
+        })
+
+        // Error
+        .catch((error) => {
+            return res.status(500).send({
+                message: 'Error returning data'
+            });
+        });
     }
+
 };
 
 module.exports = controller; // Export, to use it in other files
