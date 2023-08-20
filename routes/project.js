@@ -12,4 +12,7 @@ router.post('/test', ProjectController.test); // Route /test
 // Added save-project route to save a project with post method
 router.post('/save-project', ProjectController.saveProject);
 
+// Added project route that returns a document from the database, with get method
+router.get('/project/:id?', ProjectController.getProject); // id? optional
+
 module.exports = router; // Export, to use it in other files
