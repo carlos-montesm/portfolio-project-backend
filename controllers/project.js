@@ -61,7 +61,7 @@ var controller = {
         // If the route does not have the ID, /project/:id?, id? optional
         if(projectId == null) return res.status(404).send({message: 'The project does not exist.'});
 
-        // Mongoose function, find an object in the database whose ID is passed by parameter
+        // Mongoose function (findById), find an object in the database whose ID is passed by parameter
         Project.findById(projectId)
         .then((project) => {
 
@@ -80,6 +80,30 @@ var controller = {
         .catch((error) => {
             return res.status(500).send({
                 message: 'Error returning data'
+            });
+        });
+    },
+
+    // API method that returns all projects in the database
+    getProjects: function(req, res) {
+
+        // Mongoose function (find), find all projects in the database
+        Project.find().then((projects) => {
+
+            if(!projects) { // projects do not exist, it returns an error
+                return res.status(404).send({
+                    message: 'The project does not exist.'
+                });
+            }
+
+            return res.status(200).send({ // Server response successful, returns all projects
+                projects
+            });
+        })
+
+        .catch((error) => {
+            return res.status(500).send({
+                message: 'Error returning data.'
             });
         });
     }
