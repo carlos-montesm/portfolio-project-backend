@@ -15,4 +15,7 @@ router.post('/save-project', ProjectController.saveProject);
 // Added project route that returns a document from the database, with get method
 router.get('/project/:id?', ProjectController.getProject); // id? optional
 
+// Added projects route that returns all projects in the database, with get method
+router.get('/projects', ProjectController.getProjects);
+
 module.exports = router; // Export, to use it in other files
