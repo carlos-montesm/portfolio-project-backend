@@ -4,6 +4,7 @@
 'use strict'
 
 var Project = require('../models/project'); // Import the project model
+var fs = require('fs'); // Import fs module, to remove files, ..., etc
 
 var controller = {
     // req: user request, res: server response
@@ -187,27 +188,38 @@ var controller = {
             var filePath = req.files.image.path;
             var fileSplit = filePath.split('\\'); // Separate the path by \\
             var fileName = fileSplit[1]; // Image file name
+            var extSplit = fileName.split('\.'); // Separates the name and the extension of the image
+            var fileExt = extSplit[1]; // The extension of the image
 
-            // Method that updates the project, to add the name of the image
-            // {new: true}: Returns the last object saved in the database, not the previous one
-            Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true}).then((projectUpdated) => {
-                
-                if(!projectUpdated) { // project to update do not exist, it returns an error
-                    return res.status(404).send({
-                        message: 'The project does not exist and the image has not been assigned.'
+            // Save images with valid extensions
+            if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
+
+                // Method that updates the project, to add the name of the image
+                // {new: true}: Returns the last object saved in the database, not the previous one
+                Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true}).then((projectUpdated) => {
+                    
+                    if(!projectUpdated) { // project to update do not exist, it returns an error
+                        return res.status(404).send({
+                            message: 'The project does not exist and the image has not been assigned.'
+                        });
+                    }
+
+                    return res.status(200).send({ // Server response successful, updates a project
+                        project: projectUpdated
                     });
-                }
+                })
 
-                return res.status(200).send({ // Server response successful, updates a project
-                    project: projectUpdated
+                .catch((error) => {
+                    return res.status(500).send({
+                        message: 'The image has not been uploaded.'
+                    });
                 });
-            })
 
-            .catch((error) => {
-                return res.status(500).send({
-                    message: 'The image has not been uploaded.'
+            }else{ // Remove file with fs module
+                fs.unlink(filePath, (err) => {
+                    return res.status(200).send({message: 'The extension is invalid'});
                 });
-            });
+            }
   
         }else{ // Image not uploaded
             return res.status(200).send({
