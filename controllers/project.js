@@ -142,6 +142,34 @@ var controller = {
                 message: 'Failed to update.'
             });
         });
+    },
+
+    // API method that remove a document from the database
+    deleteProject: function(req, res) { // req: user request, res: server response
+        
+        // We take the id value that comes to us from the URL, 
+        // to know which project to remove
+        var projectId = req.params.id;
+
+        // Mongoose function (findByIdAndRemove), remove an object in the database whose ID is passed by parameter
+        Project.findByIdAndRemove(projectId).then((projectRemoved) => {
+
+            if(!projectRemoved) { // project to delete do not exist, it returns an error
+                return res.status(404).send({
+                    message: 'Failed to delete project.'
+                });
+            }
+
+            return res.status(200).send({ // Server response successful, delete a project
+                project: projectRemoved
+            });
+        })
+
+        .catch((error) => {
+            return res.status(500).send({
+                message: 'The project could not be deleted.'
+            });
+        });
     }
 
 };
