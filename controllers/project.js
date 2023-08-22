@@ -3,7 +3,6 @@
 // which uses the project entity
 'use strict'
 
-const project = require('../models/project');
 var Project = require('../models/project'); // Import the project model
 
 var controller = {
@@ -55,7 +54,10 @@ var controller = {
     },
 
     // API method that returns a document from the database
-    getProject: function(req, res){
+    getProject: function(req, res){ // req: user request, res: server response
+        
+        // We take the id value that comes to us from the URL, 
+        // to know which project to find
         var projectId = req.params.id;
 
         // If the route does not have the ID, /project/:id?, id? optional
@@ -85,7 +87,7 @@ var controller = {
     },
 
     // API method that returns all projects in the database
-    getProjects: function(req, res) {
+    getProjects: function(req, res) { // req: user request, res: server response
 
         // Mongoose function (find), find all projects in the database
         Project.find().then((projects) => {
@@ -109,7 +111,7 @@ var controller = {
     },
 
     // API method that updates a document/project from the database
-    updateProject: function(req, res) {
+    updateProject: function(req, res) { // req: user request, res: server response
 
         // We take the id value that comes to us from the URL, 
         // to know which project to update
