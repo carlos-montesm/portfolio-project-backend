@@ -6,6 +6,12 @@ var ProjectController = require('../controllers/project'); // Load the controlle
 
 var router = express.Router(); // Load the Router object, to use get, post, ...
 
+// Import connect-multiparty module to upload files to the server
+var multipart = require('connect-multiparty');
+
+// Middleware,   The files are saved in the './' directory
+var multipartMiddleware = multipart({ uploadDir: './uploads' });
+
 router.get('/home', ProjectController.home); // Route /home
 router.post('/test', ProjectController.test); // Route /test
 
@@ -23,5 +29,8 @@ router.put('/project/:id', ProjectController.updateProject);
 
 // Added project/:id route that delete a project from the database, with delete method
 router.delete('/project/:id', ProjectController.deleteProject);
+
+// Added upload-image/:id route that upload an image to the server, with post method, and multipartMiddleware
+router.post('/upload-image/:id', multipartMiddleware, ProjectController.uploadImage);
 
 module.exports = router; // Export, to use it in other files
