@@ -21,4 +21,7 @@ router.get('/projects', ProjectController.getProjects);
 // Added project/:id route that updates a document/project from the database, with put method
 router.put('/project/:id', ProjectController.updateProject);
 
+// Added project/:id route that delete a project from the database, with delete method
+router.delete('/project/:id', ProjectController.deleteProject);
+
 module.exports = router; // Export, to use it in other files
