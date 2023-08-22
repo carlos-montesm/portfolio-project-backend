@@ -170,6 +170,50 @@ var controller = {
                 message: 'The project could not be deleted.'
             });
         });
+    },
+
+    // API method that upload an image to the server, an image for each project
+    // connect-multiparty module that allows us to upload files to the server
+    uploadImage: function(req, res) { // req: user request, res: server response
+        
+        // We take the id value that comes to us from the URL, 
+        // to know which project to upload an image
+        var projectId = req.params.id;
+        var fileName = 'Image not uploaded...'; // Image file name
+
+        if(req.files){
+
+            // Get the name of the image from the path where the image was on disk
+            var filePath = req.files.image.path;
+            var fileSplit = filePath.split('\\'); // Separate the path by \\
+            var fileName = fileSplit[1]; // Image file name
+
+            // Method that updates the project, to add the name of the image
+            // {new: true}: Returns the last object saved in the database, not the previous one
+            Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true}).then((projectUpdated) => {
+                
+                if(!projectUpdated) { // project to update do not exist, it returns an error
+                    return res.status(404).send({
+                        message: 'The project does not exist and the image has not been assigned.'
+                    });
+                }
+
+                return res.status(200).send({ // Server response successful, updates a project
+                    project: projectUpdated
+                });
+            })
+
+            .catch((error) => {
+                return res.status(500).send({
+                    message: 'The image has not been uploaded.'
+                });
+            });
+  
+        }else{ // Image not uploaded
+            return res.status(200).send({
+                message: fileName
+            });
+        }
     }
 
 };
