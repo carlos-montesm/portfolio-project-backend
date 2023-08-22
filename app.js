@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 // The requests that arrive convert them into JSON format
 app.use(bodyParser.json());
 
-// Configurar cabeceras y CORS
+// Configure headers and CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
