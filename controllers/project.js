@@ -106,6 +106,40 @@ var controller = {
                 message: 'Error returning data.'
             });
         });
+    },
+
+    // API method that updates a document/project from the database
+    updateProject: function(req, res) {
+
+        // We take the id value that comes to us from the URL, 
+        // to know which project to update
+        var projectId = req.params.id;
+
+        // The information to update that comes from the request body
+        var update = req.body;
+
+        // Mongoose function (findByIdAndUpdate), The id is passed by parameter, 
+        // and the object to update the database document with the object 
+        // that has been passed to it. This parameter {new:true}, 
+        // it is so that it returns the updated project, and not the old one.
+        Project.findByIdAndUpdate(projectId, update, {new:true}).then((projectUpdated) => {
+
+            if(!projectUpdated) { // project to update do not exist, it returns an error
+                return res.status(404).send({
+                    message: 'The project to update does not exist.'
+                });
+            }
+
+            return res.status(200).send({ // Server response successful, updates a project
+                project: projectUpdated
+            });
+        })
+
+        .catch((error) => {
+            return res.status(500).send({
+                message: 'Failed to update.'
+            });
+        });
     }
 
 };
