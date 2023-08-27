@@ -4,7 +4,8 @@
 'use strict'
 
 var Project = require('../models/project'); // Import the project model
-var fs = require('fs'); // Import fs module, to remove files, ..., etc
+var fs = require('fs'); // Import fs module, to remove files, ..., etc, work with the file system
+var path = require('path'); // Load physical paths from a file
 
 var controller = {
     // req: user request, res: server response
@@ -226,6 +227,24 @@ var controller = {
                 message: fileName
             });
         }
+    },
+
+    // Method for the backend to return an image
+    getImageFile: function(req, res){
+        
+        // We take the image value that comes to us from the URL, It is the image name
+        var file = req.params.image;
+        var path_file = './uploads/'+file; // Image's route/path
+        
+        fs.exists(path_file, (exists) => {
+            if(exists){ // If the file path exists
+                return res.sendFile(path.resolve(path_file)); // Return an image
+            }else{
+                return res.status(200).send({
+                    message: "The image does not exist..." // Error message
+                });
+            }
+        });
     }
 
 };
