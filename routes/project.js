@@ -33,4 +33,7 @@ router.delete('/project/:id', ProjectController.deleteProject);
 // Added upload-image/:id route that upload an image to the server, with post method, and multipartMiddleware
 router.post('/upload-image/:id', multipartMiddleware, ProjectController.uploadImage);
 
+// Added get-image/:image route that return an image from the database, with get method
+router.get('/get-image/:image', ProjectController.getImageFile);
+
 module.exports = router; // Export, to use it in other files
